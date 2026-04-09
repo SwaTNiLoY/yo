@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="allowed-logins" content="Dolna,DOLNA,dolna">
   <title>Waiting Message</title>
   <style>
     body {
@@ -57,31 +58,13 @@
   <div class="login-box" id="loginBox">
     <h2>What I call you?</h2>
     <input type="text" id="username" placeholder="Login name">
-    <button onclick="login()">Login</button>
+    <button id="loginBtn" type="button">Login</button>
   </div>
 
   <div class="message-box hidden" id="messageBox">
     <h1>I am still waiting for you<br>and will forever till my last breath</h1>
   </div>
 
-  <script>
-    document.querySelector('button').addEventListener('click', async () => {
-      const username = document.getElementById('username').value;
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      });
-      const result = await response.json();
-      if (result.success) {
-        document.getElementById('loginBox').classList.add('hidden');
-        setTimeout(() => {
-          document.getElementById('messageBox').classList.remove('hidden');
-        }, 1000);
-      } else {
-        alert("Invalid login name. Try again.");
-      }
-    });
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>

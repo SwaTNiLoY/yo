@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const { username } = req.body;
+  const username = (req.body?.username || '').trim();
   const validNames = ["Dolna", "DOLNA", "dolna"];
   if (validNames.includes(username)) {
     res.json({ success: true });
