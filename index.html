@@ -67,10 +67,33 @@
       z-index: 1;
     }
 
-    .login-box,
-    .message-box {
+    .scene {
+      position: relative;
+      width: min(520px, 100%);
+      padding: 30px;
+      min-height: 520px;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
       text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      pointer-events: none;
       transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .login-box,
+    .message-box,
+    .content-box {
+      text-align: center;
     }
 
     .hidden {
@@ -80,7 +103,8 @@
     }
 
     .login-box h2,
-    .message-box h1 {
+    .message-box h1,
+    .content-box h1 {
       font-size: clamp(2rem, 3vw, 3rem);
       margin-bottom: 24px;
     }
@@ -104,7 +128,8 @@
     }
 
     .login-box button,
-    .message-box button {
+    .message-box button,
+    .content-box button {
       width: 100%;
       padding: 16px 18px;
       border: none;
@@ -121,9 +146,26 @@
     }
 
     .login-box button:hover,
-    .message-box button:hover {
+    .message-box button:hover,
+    .content-box button:hover {
       transform: translateY(-2px);
       box-shadow: 0 18px 30px rgba(255, 111, 97, 0.22);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ff9f43;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
     }
 
     .details {
@@ -213,45 +255,44 @@
   </style>
 </head>
 <body>
-  <div class="login-box" id="loginBox">
-    <h2>What I call you?</h2>
-    <input type="text" id="username" placeholder="Login name">
-    <button onclick="login()">Login</button>
-  </div>
+  <div class="scene">
+    <div class="glass-card page active" id="loginPage">
+      <div class="login-box">
+        <h2>What I call you?</h2>
+        <input type="text" id="username" placeholder="Login name" autocomplete="off">
+        <button id="loginBtn" type="button">Login</button>
+      </div>
+    </div>
 
-    <div class="glass-card message-box hidden" id="messageBox">
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
+    <div class="glass-card page" id="hiddenMessagePage">
+      <div class="content-box">
+        <span class="badge">Welcome</span>
+        <h1>Great — you reached my hidden message</h1>
+        <p class="details">I just made this only for you.</p>
+        <button id="nextToWantBtn" type="button">Next</button>
+      </div>
+    </div>
+
+    <div class="glass-card page" id="wantPage">
+      <div class="content-box">
+        <span class="badge">A secret truth</span>
+        <h1>What Niloy really wants to tell you is....</h1>
+        <p class="details">There is one message I want you to read carefully.</p>
+        <button id="nextToFinalBtn" type="button">Continue</button>
+      </div>
+    </div>
+
+    <div class="glass-card page" id="finalPage">
       <div class="message-card">
         <span class="badge">Welcome</span>
-        <h1 id="welcomeText">Hello!</h1>
-        <p class="hero"><span>✨</span> <span class="highlight" id="displayName">Friend</span>, the heart is waiting for you.</p>
-        <p>Every moment without you feels like the world is a little less bright. Your presence lights up this page.</p>
-        <button id="logoutButton">Go back</button>
+        <h1>✨ Dolna,</h1>
+        <p class="details">Every moment without you feels like the world is empty for me. I know it's too early for me to approach you but still don't misjudge me. In my daily prayers and specially in Tahazzud I cry for you and ask ALLAH be kind enough to gift you as my life partner and pray for your happy life.</p>
+        <p class="details"><strong>What I really want is only you.</strong></p>
+        <p class="details">I am still waiting for you and till my last breath I will wait.</p>
       </div>
     </div>
   </div>
 
-  <script>
-    document.querySelector('button').addEventListener('click', async () => {
-      const username = document.getElementById('username').value;
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      });
-      const result = await response.json();
-      if (result.success) {
-        document.getElementById('loginBox').classList.add('hidden');
-        setTimeout(() => {
-          document.getElementById('messageBox').classList.remove('hidden');
-        }, 1000);
-      } else {
-        alert("Invalid login name. Try again.");
-      }
-    });
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>
