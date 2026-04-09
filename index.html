@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Waiting Message</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #ff6f61, #ffb347, #6a11cb, #2575fc);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .login-box, .message-box {
+      text-align: center;
+      transition: opacity 2s ease, transform 2s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+      transform: translateY(50px);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347;
+      animation: fadeIn 3s ease forwards, glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes glowPulse {
+      0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347; }
+      50% { text-shadow: 0 0 20px #fff, 0 0 40px #ff6f61, 0 0 60px #ffb347; }
+      100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box" id="loginBox">
+    <h2>What I call you?</h2>
+    <input type="text" id="username" placeholder="Login name">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div class="message-box hidden" id="messageBox">
+    <h1>I am still waiting for you<br>and will forever till my last breath</h1>
+  </div>
+
+  <script>
+    document.querySelector('button').addEventListener('click', async () => {
+      const username = document.getElementById('username').value;
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+      const result = await response.json();
+      if (result.success) {
+        document.getElementById('loginBox').classList.add('hidden');
+        setTimeout(() => {
+          document.getElementById('messageBox').classList.remove('hidden');
+        }, 1000);
+      } else {
+        alert("Invalid login name. Try again.");
+      }
+    });
+  </script>
+</body>
+</html>

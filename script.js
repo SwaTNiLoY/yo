@@ -1,0 +1,1 @@
+function login(){const e=document.getElementById("username").value,t=["Dolna","DOLNA","dolna"];t.includes(e)?(document.getElementById("loginBox").classList.add("hidden"),setTimeout(()=>{document.getElementById("messageBox").classList.remove("hidden")},1e3)):alert("Invalid login name. Try again.")}
