@@ -5,52 +5,210 @@
   <meta name="allowed-logins" content="Dolna,DOLNA,dolna">
   <title>Waiting Message</title>
   <style>
+    :root {
+      --bg1: #0d1b2a;
+      --bg2: #1b263b;
+      --card: rgba(255, 255, 255, 0.12);
+      --card-border: rgba(255, 255, 255, 0.24);
+      --text: #f8f9fa;
+      --accent: #ff6f61;
+      --accent-soft: rgba(255, 111, 97, 0.15);
+      --shadow: 0 20px 80px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(-45deg, #ff6f61, #ffb347, #6a11cb, #2575fc);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: radial-gradient(circle at top left, rgba(255, 111, 97, 0.25), transparent 26%),
+                  radial-gradient(circle at bottom right, rgba(37, 117, 252, 0.18), transparent 28%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .scene {
+      position: relative;
+      width: min(520px, 100%);
+      padding: 30px;
+    }
+
+    .glass-card {
+      position: relative;
+      backdrop-filter: blur(18px);
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 42px 32px;
       overflow: hidden;
     }
 
-    .login-box, .message-box {
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 35%);
+      pointer-events: none;
+    }
+
+    .glass-card h2,
+    .glass-card h1,
+    .glass-card p {
+      position: relative;
+      margin: 0;
+      z-index: 1;
+    }
+
+    .login-box,
+    .message-box {
       text-align: center;
-      transition: opacity 2s ease, transform 2s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
     .hidden {
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateY(40px);
       pointer-events: none;
     }
 
-    h1 {
-      font-size: 2.5em;
-      text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347;
-      animation: fadeIn 3s ease forwards, glowPulse 3s ease-in-out infinite;
+    .login-box h2,
+    .message-box h1 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      margin-bottom: 24px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    .login-box input {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 18px;
+      outline: none;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .login-box input:focus {
+      border-color: rgba(255, 111, 97, 0.75);
+      transform: translateY(-2px);
     }
 
-    @keyframes glowPulse {
-      0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347; }
-      50% { text-shadow: 0 0 20px #fff, 0 0 40px #ff6f61, 0 0 60px #ffb347; }
-      100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ffb347; }
+    .login-box button,
+    .message-box button {
+      width: 100%;
+      padding: 16px 18px;
+      border: none;
+      border-radius: 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff6f61, #ff9f43);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 8px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .login-box button:hover,
+    .message-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(255, 111, 97, 0.22);
+    }
+
+    .details {
+      margin-top: 18px;
+      color: rgba(248, 249, 250, 0.79);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .message-card {
+      display: grid;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .message-card .badge {
+      align-self: start;
+      justify-self: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ff9f43;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .message-card p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .message-card .hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .message-card .hero span {
+      font-size: 2rem;
+      color: #ff6f61;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .message-card .highlight {
+      color: #ffd166;
+      font-weight: 700;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.4;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 60%);
+      animation: floatUp 12s linear infinite;
+      z-index: 0;
+    }
+
+    .bubble:nth-child(1) { width: 120px; height: 120px; left: -20px; top: 40px; animation-delay: 0s; }
+    .bubble:nth-child(2) { width: 80px; height: 80px; right: 10px; top: 80px; animation-delay: 2s; }
+    .bubble:nth-child(3) { width: 100px; height: 100px; left: 20%; bottom: -40px; animation-delay: 4s; }
+    .bubble:nth-child(4) { width: 50px; height: 50px; right: 28%; bottom: 20px; animation-delay: 1s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-18px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @media (max-width: 520px) {
+      .glass-card {
+        padding: 30px 22px;
+      }
+
+      .login-box h2,
+      .message-box h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -58,13 +216,42 @@
   <div class="login-box" id="loginBox">
     <h2>What I call you?</h2>
     <input type="text" id="username" placeholder="Login name">
-    <button id="loginBtn" type="button">Login</button>
+    <button onclick="login()">Login</button>
   </div>
 
-  <div class="message-box hidden" id="messageBox">
-    <h1>I am still waiting for you<br>and will forever till my last breath</h1>
+    <div class="glass-card message-box hidden" id="messageBox">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="message-card">
+        <span class="badge">Welcome</span>
+        <h1 id="welcomeText">Hello!</h1>
+        <p class="hero"><span>✨</span> <span class="highlight" id="displayName">Friend</span>, the heart is waiting for you.</p>
+        <p>Every moment without you feels like the world is a little less bright. Your presence lights up this page.</p>
+        <button id="logoutButton">Go back</button>
+      </div>
+    </div>
   </div>
 
-  <script src="./script.js"></script>
+  <script>
+    document.querySelector('button').addEventListener('click', async () => {
+      const username = document.getElementById('username').value;
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+      const result = await response.json();
+      if (result.success) {
+        document.getElementById('loginBox').classList.add('hidden');
+        setTimeout(() => {
+          document.getElementById('messageBox').classList.remove('hidden');
+        }, 1000);
+      } else {
+        alert("Invalid login name. Try again.");
+      }
+    });
+  </script>
 </body>
 </html>
